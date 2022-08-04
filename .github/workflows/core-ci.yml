@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - "master"
-
   pull_request:
     branches:
       - "master"
@@ -29,5 +28,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Get changed file
+        id: changed-files
+        uses: dorny@paths-filter@v2
+        with:
+          filters: |
+            core:
+              - 'core/**'
+
       - name: Build Spark3.1 with Maven
+        if: step.changed-files.outputs.core == 'true'
         run: mvn test

@@ -8,7 +8,7 @@ on:
     branches:
       - "master"
     paths:
-      - "/core"
+      - "core"
   pull_request:
     branches:
       - "master"

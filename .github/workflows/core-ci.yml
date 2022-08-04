@@ -37,5 +37,5 @@ jobs:
               - 'core/**'
 
       - name: Build Spark3.1 with Maven
-        if: step.changed-files.outputs.core == 'true'
+        if: steps.changed-files.outputs.core == 'true'
         run: mvn test

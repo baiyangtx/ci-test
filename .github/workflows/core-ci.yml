@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - "master"
+    paths:
+      - "core/**"
   pull_request:
     branches:
       - "master"
@@ -28,18 +30,18 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Get changed file
-        id: changed-files
-        uses: dorny/paths-filter@v2
-        with:
-          filters: |
-            core:
-              - 'core/**'
-
-      - name: setup env
-        if: steps.changed-files.outputs.core == 'true'
-        env:
-          module: core
+#      - name: Get changed file
+#        id: changed-files
+#        uses: dorny/paths-filter@v2
+#        with:
+#          filters: |
+#            core:
+#              - 'core/**'
+#
+#      - name: setup env
+#        if: steps.changed-files.outputs.core == 'true'
+#        env:
+#          module: core
 
       - name: run maven test
-        run: mvn test -pl $module -am -e
+        run: mvn test

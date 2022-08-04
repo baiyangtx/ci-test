@@ -36,6 +36,10 @@ jobs:
             core:
               - 'core/**'
 
-      - name: Build Spark3.1 with Maven
+      - name: setup env
         if: steps.changed-files.outputs.core == 'true'
-        run: mvn test
+        env:
+          module: core
+
+      - name: run maven test
+        run: mvn test -pl $module -am -e

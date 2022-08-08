@@ -7,18 +7,29 @@ on:
   push:
     branches:
       - "master"
-    paths:
-      - "core/**"
   pull_request:
     branches:
       - "master"
 
 
 jobs:
-  build:
-
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: detach changes
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            core: core/**
+            spark: spark/**
 
+  build:
+    runs-on: ubuntu-latest
+    needs: changes
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
@@ -30,18 +41,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-#      - name: Get changed file
-#        id: changed-files
-#        uses: dorny/paths-filter@v2
-#        with:
-#          filters: |
-#            core:
-#              - 'core/**'
-#
-#      - name: setup env
-#        if: steps.changed-files.outputs.core == 'true'
-#        env:
-#          module: core
 
       - name: run maven test
-        run: mvn test
+        run: mvn test -pl ${{ fromJSON(needs.changes.output.packages }}

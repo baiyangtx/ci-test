@@ -43,4 +43,4 @@ jobs:
 
 
       - name: run maven test
-        run: mvn test -pl ${{ fromJSON(needs.changes.output.packages }}
+        run: mvn test -pl ${{ fromJSON(needs.changes.outputs.packages }}
